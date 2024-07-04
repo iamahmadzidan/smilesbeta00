@@ -34,23 +34,24 @@ class MyHome extends StatelessWidget {
               ),
               bottom: const TabBar(
                 tabs: [
-                Tab(
-                  icon: Icon(Icons.electric_bolt_rounded),
-                  text: 'Baterai',
-                ),
-                Tab(
-                  icon: Icon(Icons.rectangle_rounded),
-                  text: 'Sel',
-                )]
-                
+                  Tab(
+                    icon: Icon(Icons.electric_bolt_rounded),
+                    text: 'Baterai',
+                  ),
+                  Tab(
+                    icon: Icon(Icons.rectangle_rounded),
+                    text: 'Sel',
+                  )
+                ],
               )),
           body: const TabBarView(
             children: [
-              // Halaman 1 (Kesehatan Keseluruhan Baterai)
+              //halaman 1
               Center(
                 child: Text('Halaman 1: Kesehatan Keseluruhan Baterai'),
               ),
-              MyBatteryCellPage(), // Panggil widget dari file terpisah
+              //halaman 2
+              MyBatteryCellPage(),
             ],
           ),
         ));
