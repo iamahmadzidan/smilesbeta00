@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:smilesbeta00/halaman/batterycellpage.dart';
+import 'package:smilesbeta00/halaman/helppage.dart';
+import 'package:smilesbeta00/halaman/menupage.dart';
 import 'package:smilesbeta00/halaman/wholebatterypage.dart';
 
 class MyHome extends StatefulWidget {
@@ -36,11 +38,21 @@ class HomePageState extends State<MyHome> {
         leading: Image.asset('assets/img/smileslogo.png'),
         actions: [
           IconButton(
-            onPressed: () {},
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const HelpPage()),
+              );
+            },
             icon: const Icon(Icons.question_mark, color: Colors.black),
           ),
           IconButton(
-            onPressed: () {},
+            onPressed: () {
+               Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const MenuPage()),
+              );
+            },
             icon: const Icon(Icons.menu_rounded, color: Colors.black),
           ),
         ],
