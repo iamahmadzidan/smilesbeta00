@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "373224562105",
+    "project_id": "smiles-monitoring",
+    "storage_bucket": "smiles-monitoring.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:373224562105:android:fe554224de412c92086a68",
+        "android_client_info": {
+          "package_name": "com.timkiftunhas.smiles"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBIa8BKgrlW30vaubdX8B9qm6ENEsHmV_M"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
