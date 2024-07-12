@@ -1,6 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <application
-        android:label="smilesbeta00"
+        android:label="smiles"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
