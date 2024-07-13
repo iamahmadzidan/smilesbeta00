@@ -57,10 +57,10 @@ class MyBatteryCellPage extends StatelessWidget {
                 showDialog(
                     context: context,
                     builder: (BuildContext context) {
-                      return const AlertDialog(
+                      return  const AlertDialog(
                           title: Text('Normal'),
                           content: Text(
-                            'Tegangan 4 V\nArus 2 A\n',
+                            'Tegangan \nArus 2 A\n',
                             textAlign: TextAlign.center,
                           ));
                     });
