@@ -1,4 +1,5 @@
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:smilesbeta00/halaman/batterycellpage.dart';
 import 'package:smilesbeta00/halaman/helppage.dart';
@@ -20,15 +21,29 @@ class HomePageState extends State<MyHome> {
     Icons.rectangle_rounded,
   ];
 
-  List<Widget> pages = [
-    const MyWholeBatteryPage(),
-    const MyBatteryCellPage(), // Placeholder for other page
-  ];
+  List<Widget> pages = [];
+  String realTimeValue = '0';
+
+  @override
+  void initState() {
+    super.initState();
+    DatabaseReference testRef = FirebaseDatabase.instance.ref().child('presentase');
+    testRef.onValue.listen(
+      (event) {
+        setState(() {
+          realTimeValue = event.snapshot.value.toString();
+          pages = [
+            MyWholeBatteryPage(realTimeValue: realTimeValue),
+            const MyBatteryCellPage(), // Placeholder for other page
+          ];
+        });
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
-    double navigationBarWidth =
-        100 + (data.length * 100); // Adjust this value based on your needs
+    double navigationBarWidth = 100 + (data.length * 100); // Adjust this value based on your needs
 
     return Scaffold(
       appBar: AppBar(
@@ -76,7 +91,7 @@ class HomePageState extends State<MyHome> {
           if (snapshot.hasError) {
             return const Center(child: Text("Ada masalah dengan firebase"));
           } else if (snapshot.connectionState == ConnectionState.done) {
-            return pages[selectedIndex];
+            return pages.isNotEmpty ? pages[selectedIndex] : const CircularProgressIndicator();
           } else {
             return const Center(child: CircularProgressIndicator());
           }
@@ -115,8 +130,7 @@ class HomePageState extends State<MyHome> {
                       decoration: BoxDecoration(
                         border: i == selectedIndex
                             ? const Border(
-                                bottom:
-                                    BorderSide(width: 3.0, color: Colors.blue))
+                                bottom: BorderSide(width: 3.0, color: Colors.blue))
                             : null,
                         gradient: i == selectedIndex
                             ? const LinearGradient(
