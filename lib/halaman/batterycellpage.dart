@@ -36,12 +36,6 @@ class MyBatteryCellPage extends StatelessWidget {
                 showDialog(
                     context: context,
                     builder: (BuildContext context) {
-<<<<<<< Updated upstream
-                      return const AlertDialog(
-                          title: Text('Normal'),
-                          content: Text(
-                            'Tegangan 4 V\nArus 2 A\n',
-=======
                       String status;
                       if (voltages[i] >= 3.3 && voltages[i] <= 4.2) {
                         status = 'Normal';
@@ -54,7 +48,6 @@ class MyBatteryCellPage extends StatelessWidget {
                           title: Text(status),
                           content: Text(
                             'Tegangan: ${voltages[i]} V\nArus: 2 A\n',
->>>>>>> Stashed changes
                             textAlign: TextAlign.center,
                           ));
                     });
