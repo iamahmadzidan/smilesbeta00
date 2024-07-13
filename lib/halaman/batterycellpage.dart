@@ -5,44 +5,23 @@ class MyBatteryCellPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Define colors for each cell
-    List<Color> colors = [
-      Colors.red,
-      Colors.orange,
-      const Color.fromARGB(255, 165, 252, 168),
-      const Color.fromARGB(255, 165, 252, 168),
-      const Color.fromARGB(255, 165, 252, 168),
-      const Color.fromARGB(255, 165, 252, 168),
-      const Color.fromARGB(255, 165, 252, 168),
-      const Color.fromARGB(255, 165, 252, 168),
-      const Color.fromARGB(255, 165, 252, 168),
-      const Color.fromARGB(255, 165, 252, 168),
-      const Color.fromARGB(255, 165, 252, 168),
-      const Color.fromARGB(255, 165, 252, 168),
-      const Color.fromARGB(255, 165, 252, 168),
-      const Color.fromARGB(255, 165, 252, 168),
-      const Color.fromARGB(255, 165, 252, 168),
-      const Color.fromARGB(255, 165, 252, 168),
-      const Color.fromARGB(255, 165, 252, 168),
-      const Color.fromARGB(255, 165, 252, 168),
-      const Color.fromARGB(255, 165, 252, 168),
-      const Color.fromARGB(255, 165, 252, 168),
-      const Color.fromARGB(255, 165, 252, 168),
-      const Color.fromARGB(255, 165, 252, 168),
-      const Color.fromARGB(255, 165, 252, 168),
-      const Color.fromARGB(255, 165, 252, 168),
-      const Color.fromARGB(255, 165, 252, 168),
-      const Color.fromARGB(255, 165, 252, 168),
-      const Color.fromARGB(255, 165, 252, 168),
-      const Color.fromARGB(255, 165, 252, 168),
-      const Color.fromARGB(255, 165, 252, 168),
-      const Color.fromARGB(255, 165, 252, 168),
-      const Color.fromARGB(255, 165, 252, 168),
-      const Color.fromARGB(255, 165, 252, 168),
-      const Color.fromARGB(255, 165, 252, 168),
-      const Color.fromARGB(255, 165, 252, 168),
-      const Color.fromARGB(255, 165, 252, 168),
+    // Data tegangan baterai untuk setiap kotak
+    List<double> voltages = [
+      4.0, 3.5, 3.8, 4.1, 3.7, 3.3, 2.9, 3.2, 3.1, 2.7, 2.5, 3.4, 3.6, 3.9, 4.2,
+      2.4, 2.8, 2.6, 1.5, 1.0, 0.8, 0.5, 3.0, 3.1, 3.2, 3.4, 3.6, 3.8, 4.0, 4.1,
+      4.2, 3.9, 3.8, 3.7, 3.5
     ];
+
+    // Fungsi untuk menentukan warna berdasarkan tegangan
+    Color getColor(double voltage) {
+      if (voltage >= 3.3 && voltage <= 4.2) {
+        return const Color.fromARGB(255, 165, 252, 168); // Hijau (Normal)
+      } else if (voltage >= 2.5 && voltage < 3.3) {
+        return Colors.orange; // Kuning (Hati-hati)
+      } else {
+        return Colors.red; // Merah (Mati)
+      }
+    }
 
     return Center(
       child: GridView.count(
@@ -51,16 +30,31 @@ class MyBatteryCellPage extends StatelessWidget {
         crossAxisCount: 7,
         childAspectRatio: 1,
         children: [
-          for (int i = 0; i < 35; i++) // Looping 35 kali
+          for (int i = 0; i < voltages.length; i++) // Looping sesuai panjang list voltages
             InkWell(
               onTap: () {
                 showDialog(
                     context: context,
                     builder: (BuildContext context) {
+<<<<<<< Updated upstream
                       return const AlertDialog(
                           title: Text('Normal'),
                           content: Text(
                             'Tegangan 4 V\nArus 2 A\n',
+=======
+                      String status;
+                      if (voltages[i] >= 3.3 && voltages[i] <= 4.2) {
+                        status = 'Normal';
+                      } else if (voltages[i] >= 2.5 && voltages[i] < 3.3) {
+                        status = 'Hati-hati';
+                      } else {
+                        status = 'Mati';
+                      }
+                      return AlertDialog(
+                          title: Text(status),
+                          content: Text(
+                            'Tegangan: ${voltages[i]} V\nArus: 2 A\n',
+>>>>>>> Stashed changes
                             textAlign: TextAlign.center,
                           ));
                     });
@@ -74,8 +68,8 @@ class MyBatteryCellPage extends StatelessWidget {
                     center: Alignment.center,
                     radius: 0.5,
                     colors: [
-                      colors[i].withOpacity(0.5), // Transparent center color
-                      colors[i], // Solid edge color
+                      getColor(voltages[i]).withOpacity(0.5), // Transparent center color
+                      getColor(voltages[i]), // Solid edge color
                     ],
                   ),
                   borderRadius: BorderRadius.circular(10), // Rounded corners
@@ -107,4 +101,13 @@ class MyBatteryCellPage extends StatelessWidget {
       ),
     );
   }
+}
+
+void main() {
+  runApp(MaterialApp(
+    home: Scaffold(
+      appBar: AppBar(title: Text('Baterai sel')),
+      body: MyBatteryCellPage(),
+    ),
+  ));
 }
