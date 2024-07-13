@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "373224562105",
+    "firebase_url": "https://smiles-monitoring-default-rtdb.asia-southeast1.firebasedatabase.app",
     "project_id": "smiles-monitoring",
     "storage_bucket": "smiles-monitoring.appspot.com"
   },

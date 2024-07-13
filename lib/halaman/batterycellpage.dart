@@ -36,6 +36,7 @@ class MyBatteryCellPage extends StatelessWidget {
                 showDialog(
                     context: context,
                     builder: (BuildContext context) {
+
                       String status;
                       if (voltages[i] >= 3.3 && voltages[i] <= 4.2) {
                         status = 'Normal';
@@ -48,6 +49,7 @@ class MyBatteryCellPage extends StatelessWidget {
                           title: Text(status),
                           content: Text(
                             'Tegangan: ${voltages[i]} V\nArus: 2 A\n',
+
                             textAlign: TextAlign.center,
                           ));
                     });
@@ -94,13 +96,4 @@ class MyBatteryCellPage extends StatelessWidget {
       ),
     );
   }
-}
-
-void main() {
-  runApp(MaterialApp(
-    home: Scaffold(
-      appBar: AppBar(title: Text('Baterai sel')),
-      body: MyBatteryCellPage(),
-    ),
-  ));
 }
