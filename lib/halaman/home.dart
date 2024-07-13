@@ -1,4 +1,3 @@
-
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
@@ -15,31 +14,36 @@ class MyHome extends StatefulWidget {
 }
 
 class HomePageState extends State<MyHome> {
+  final Future<FirebaseApp> _fApp = Firebase.initializeApp();
   int selectedIndex = 0;
   List<IconData> data = [
     Icons.battery_full_rounded,
     Icons.rectangle_rounded,
   ];
 
-  List<Widget> pages = [
-    const MyWholeBatteryPage(realTimeValue: '0',),
-    const MyBatteryCellPage(), // Placeholder for other page
-  ];
+  List<Widget> pages = [];
+  String realTimeValue = '0';
 
   @override
-  Widget build(BuildContext context) {
-    DatabaseReference _testRef =
-        FirebaseDatabase.instance.ref().child('presentase');
-    String realTimeValue = '0';
-    _testRef.onValue.listen(
+  void initState() {
+    super.initState();
+    DatabaseReference testRef = FirebaseDatabase.instance.ref().child('presentase');
+    testRef.onValue.listen(
       (event) {
         setState(() {
           realTimeValue = event.snapshot.value.toString();
+          pages = [
+            MyWholeBatteryPage(realTimeValue: realTimeValue),
+            const MyBatteryCellPage(), // Placeholder for other page
+          ];
         });
       },
     );
-    double navigationBarWidth =
-        100 + (data.length * 100); // Adjust this value based on your needs
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    double navigationBarWidth = 100 + (data.length * 100); // Adjust this value based on your needs
 
     return Scaffold(
       appBar: AppBar(
@@ -61,7 +65,7 @@ class HomePageState extends State<MyHome> {
           ),
           IconButton(
             onPressed: () {
-               Navigator.push(
+              Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => const MenuPage()),
               );
@@ -81,7 +85,18 @@ class HomePageState extends State<MyHome> {
         ),
       ),
       backgroundColor: Colors.white,
-      body: pages[selectedIndex],
+      body: FutureBuilder(
+        future: _fApp,
+        builder: (context, snapshot) {
+          if (snapshot.hasError) {
+            return const Center(child: Text("Ada masalah dengan firebase"));
+          } else if (snapshot.connectionState == ConnectionState.done) {
+            return pages.isNotEmpty ? pages[selectedIndex] : const CircularProgressIndicator();
+          } else {
+            return const Center(child: CircularProgressIndicator());
+          }
+        },
+      ),
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.only(bottom: 20, left: 90, right: 90),
         child: Material(
@@ -115,8 +130,7 @@ class HomePageState extends State<MyHome> {
                       decoration: BoxDecoration(
                         border: i == selectedIndex
                             ? const Border(
-                                bottom:
-                                    BorderSide(width: 3.0, color: Colors.blue))
+                                bottom: BorderSide(width: 3.0, color: Colors.blue))
                             : null,
                         gradient: i == selectedIndex
                             ? const LinearGradient(
