@@ -1,3 +1,4 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:smilesbeta00/halaman/batterycellpage.dart';
 import 'package:smilesbeta00/halaman/helppage.dart';
@@ -12,6 +13,7 @@ class MyHome extends StatefulWidget {
 }
 
 class HomePageState extends State<MyHome> {
+  final Future<FirebaseApp> _fApp = Firebase.initializeApp();
   int selectedIndex = 0;
   List<IconData> data = [
     Icons.battery_full_rounded,
@@ -48,7 +50,7 @@ class HomePageState extends State<MyHome> {
           ),
           IconButton(
             onPressed: () {
-               Navigator.push(
+              Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => const MenuPage()),
               );
@@ -68,7 +70,18 @@ class HomePageState extends State<MyHome> {
         ),
       ),
       backgroundColor: Colors.white,
-      body: pages[selectedIndex],
+      body: FutureBuilder(
+        future: _fApp,
+        builder: (context, snapshot) {
+          if (snapshot.hasError) {
+            return const Center(child: Text("Ada masalah dengan firebase"));
+          } else if (snapshot.connectionState == ConnectionState.done) {
+            return pages[selectedIndex];
+          } else {
+            return const Center(child: CircularProgressIndicator());
+          }
+        },
+      ),
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.only(bottom: 20, left: 90, right: 90),
         child: Material(
