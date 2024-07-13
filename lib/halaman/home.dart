@@ -1,3 +1,6 @@
+
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:smilesbeta00/halaman/batterycellpage.dart';
 import 'package:smilesbeta00/halaman/helppage.dart';
@@ -19,12 +22,22 @@ class HomePageState extends State<MyHome> {
   ];
 
   List<Widget> pages = [
-    const MyWholeBatteryPage(),
+    const MyWholeBatteryPage(realTimeValue: '0',),
     const MyBatteryCellPage(), // Placeholder for other page
   ];
 
   @override
   Widget build(BuildContext context) {
+    DatabaseReference _testRef =
+        FirebaseDatabase.instance.ref().child('presentase');
+    String realTimeValue = '0';
+    _testRef.onValue.listen(
+      (event) {
+        setState(() {
+          realTimeValue = event.snapshot.value.toString();
+        });
+      },
+    );
     double navigationBarWidth =
         100 + (data.length * 100); // Adjust this value based on your needs
 
