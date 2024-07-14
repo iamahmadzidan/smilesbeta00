@@ -1,10 +1,8 @@
-import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:smilesbeta00/halaman/batterycellpage.dart';
-import 'package:smilesbeta00/halaman/helppage.dart';
-import 'package:smilesbeta00/halaman/menupage.dart';
 import 'package:smilesbeta00/halaman/wholebatterypage.dart';
+import 'package:smilesbeta00/widgets/custom_app_bar.dart';
+import 'package:smilesbeta00/services/firebase_service.dart';
 
 class MyHome extends StatefulWidget {
   const MyHome({super.key});
@@ -14,89 +12,32 @@ class MyHome extends StatefulWidget {
 }
 
 class HomePageState extends State<MyHome> {
-  final Future<FirebaseApp> _fApp = Firebase.initializeApp();
   int selectedIndex = 0;
-  List<IconData> data = [
-    Icons.battery_full_rounded,
-    Icons.rectangle_rounded,
-  ];
-
-  List<Widget> pages = [];
   String realTimeValue = '0';
+  final FirebaseService _firebaseService = FirebaseService();
 
   @override
   void initState() {
     super.initState();
-    DatabaseReference testRef = FirebaseDatabase.instance.ref().child('presentase');
-    testRef.onValue.listen(
-      (event) {
-        setState(() {
-          realTimeValue = event.snapshot.value.toString();
-          pages = [
-            MyWholeBatteryPage(realTimeValue: realTimeValue),
-            const MyBatteryCellPage(), // Placeholder for other page
-          ];
-        });
-      },
-    );
+    _firebaseService.getRealTimeValue().listen((value) {
+      setState(() {
+        realTimeValue = value;
+      });
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    double navigationBarWidth = 100 + (data.length * 100); // Adjust this value based on your needs
+    double navigationBarWidth = 100 + (2 * 100);
+    List<Widget> pages = [
+      MyWholeBatteryPage(realTimeValue: realTimeValue),
+      const MyBatteryCellPage(),
+    ];
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          'Smiles',
-          style: TextStyle(fontWeight: FontWeight.bold),
-        ),
-        titleSpacing: 0,
-        leading: Image.asset('assets/img/smileslogo.png'),
-        actions: [
-          IconButton(
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const HelpPage()),
-              );
-            },
-            icon: const Icon(Icons.question_mark, color: Colors.black),
-          ),
-          IconButton(
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const MenuPage()),
-              );
-            },
-            icon: const Icon(Icons.menu_rounded, color: Colors.black),
-          ),
-        ],
-        toolbarHeight: 70,
-        elevation: 20,
-        flexibleSpace: Container(
-          decoration: const BoxDecoration(
-            image: DecorationImage(
-              image: AssetImage('assets/img/appbarbg.png'),
-              fit: BoxFit.cover,
-            ),
-          ),
-        ),
-      ),
+      appBar: const CustomAppBar(title: 'Smiles'),
       backgroundColor: Colors.white,
-      body: FutureBuilder(
-        future: _fApp,
-        builder: (context, snapshot) {
-          if (snapshot.hasError) {
-            return const Center(child: Text("Ada masalah dengan firebase"));
-          } else if (snapshot.connectionState == ConnectionState.done) {
-            return pages.isNotEmpty ? pages[selectedIndex] : const CircularProgressIndicator();
-          } else {
-            return const Center(child: CircularProgressIndicator());
-          }
-        },
-      ),
+      body: pages[selectedIndex],
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.only(bottom: 20, left: 90, right: 90),
         child: Material(
@@ -114,8 +55,8 @@ class HomePageState extends State<MyHome> {
             ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: data.map((iconData) {
-                int i = data.indexOf(iconData);
+              children: [Icons.battery_full_rounded, Icons.rectangle_rounded].map((iconData) {
+                int i = [Icons.battery_full_rounded, Icons.rectangle_rounded].indexOf(iconData);
                 return Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 15),
                   child: GestureDetector(
@@ -129,27 +70,14 @@ class HomePageState extends State<MyHome> {
                       width: 60,
                       decoration: BoxDecoration(
                         border: i == selectedIndex
-                            ? const Border(
-                                bottom: BorderSide(width: 3.0, color: Colors.blue))
-                            : null,
-                        gradient: i == selectedIndex
-                            ? const LinearGradient(
-                                colors: [
-                                  Colors.transparent,
-                                  Colors.transparent
-                                ],
-                                begin: Alignment.topCenter,
-                                end: Alignment.bottomCenter,
-                              )
+                            ? const Border(bottom: BorderSide(width: 3.0, color: Colors.blue))
                             : null,
                       ),
                       child: Center(
                         child: Icon(
                           iconData,
                           size: 30,
-                          color: i == selectedIndex
-                              ? Colors.white
-                              : Colors.grey.shade800,
+                          color: i == selectedIndex ? Colors.white : Colors.grey.shade800,
                         ),
                       ),
                     ),
