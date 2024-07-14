@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:smilesbeta00/halaman/home.dart';
+import 'halaman/home.dart';
+import 'halaman/helppage.dart';
+import 'halaman/menupage.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -20,7 +22,12 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
         useMaterial3: true,
       ),
-      home: const MyHome()
+      initialRoute: '/',
+      routes: {
+        '/': (context) => const MyHome(),
+        '/help': (context) => const HelpPage(),
+        '/menu': (context) => const MenuPage(),
+      },
     );
   }
 }
