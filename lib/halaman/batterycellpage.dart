@@ -5,10 +5,12 @@ import 'package:firebase_database/firebase_database.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -22,13 +24,13 @@ class MyApp extends StatelessWidget {
 }
 
 class MyBatteryCellPage extends StatefulWidget {
-  const MyBatteryCellPage({Key? key}) : super(key: key);
+  const MyBatteryCellPage({super.key});
 
   @override
-  _MyBatteryCellPageState createState() => _MyBatteryCellPageState();
+  MyBatteryCellPageState createState() => MyBatteryCellPageState();
 }
 
-class _MyBatteryCellPageState extends State<MyBatteryCellPage> {
+class MyBatteryCellPageState extends State<MyBatteryCellPage> {
   late DatabaseReference _databaseReference;
   List<double> voltages = [];
   bool isLoading = true;
